@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Stage Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --success: #00d084;
+            --warning: #ffd700;
+            --danger: #ff4757;
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #2c2c4c;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            background: var(--primary);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        body.light-mode {
+            --primary: #ffffff;
+            --secondary: #f5f5f5;
+            --accent: #e0e0e0;
+            --text: #000000;
+            --text-secondary: #555555;
+            --border: #cccccc;
+        }
+
+        header {
+            background: var(--secondary);
+            padding: 15px 20px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .mode-indicator {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .mode-badge {
+            padding: 5px 12px;
+            background: var(--accent);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .timer-display {
+            font-size: 180px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            letter-spacing: -2px;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            color: var(--success);
+            margin-bottom: 20px;
+            text-align: center;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-display.warning {
+            color: var(--warning);
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .timer-display.critical {
+            color: var(--danger);
+            text-shadow: 0 0 50px rgba(255, 71, 87, 0.8);
+            animation: pulse-critical 0.5s infinite;
+        }
+
+        @keyframes pulse-critical {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .counter-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .counter-item {
+            background: var(--accent);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .counter-item label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .counter-item input {
+            width: 100%;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            background: transparent;
+            color: var(--text);
+            border: none;
+            border-bottom: 2px solid var(--border);
+            margin-top: 5px;
+            padding: 5px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            background: var(--accent);
+            color: var(--text);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: var(--success);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.btn-start {
+            background: var(--success);
+            color: #000;
+        }
+
+        button.btn-start:hover {
+            background: #00c46e;
+        }
+
+        button.btn-pause {
+            background: var(--warning);
+            color: #000;
+        }
+
+        button.btn-pause:hover {
+            background: #ffcd00;
+        }
+
+        button.btn-reset {
+            background: var(--danger);
+        }
+
+        button.btn-reset:hover {
+            background: #ff3838;
+        }
+
+        .presets {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .preset-btn {
+            padding: 8px 16px;
+            font-size: 12px;
+            min-width: auto;
+        }
+
+        .preset-btn.active {
+            background: var(--success);
+            color: #000;
+            border-color: var(--success);
+        }
+
+        .settings-panel {
+            background: var(--secondary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            max-width: 700px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .setting-group label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .setting-group input[type="number"],
+        .setting-group select {
+            padding: 8px;
+            background: var(--primary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: none;
+            color: var(--text);
+        }
+
+        .footer {
+            background: var(--secondary);
+            padding: 10px 20px;
+            border-top: 2px solid var(--border);
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .keyboard-hint {
+            position: fixed;
+            bottom: 5px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        .screen-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .screen-fullscreen .timer-display {
+            font-size: 220px;
+            margin-bottom: 0;
+        }
+
+        .screen-fullscreen .timer-label {
+            font-size: 42px;
+            margin-bottom: 30px;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+        }
+
+        @keyframes flash {
+            0%, 100% { background: var(--primary); }
+            50% { background: rgba(255, 71, 87, 0.3); }
+        }
+
+        body.flashing {
+            animation: flash 0.3s;
+        }
+
+        @media (max-height: 700px) {
+            .timer-display {
+                font-size: 120px;
+                margin-bottom: 10px;
+                min-height: 140px;
+            }
+            .controls {
+                gap: 10px;
+                margin-top: 15px;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 18px;
+            }
+            .timer-display {
+                font-size: 100px;
+                margin-bottom: 10px;
+                min-height: 120px;
+            }
+            .settings-panel {
+                grid-template-columns: 1fr;
+                margin-top: 20px;
+            }
+            .main-container {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⏱ STAGE TIMER</h1>
+        <div class="mode-indicator">
+            <span class="mode-badge" id="modeLabel">COUNTDOWN</span>
+            <span class="mode-badge" id="statusLabel" style="background: var(--warning);">READY</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="timer-display" id="timerDisplay">00:00</div>
+
+        <div id="counterDisplay" class="counter-display" style="display: none;">
+            <div class="counter-item">
+                <label>Items</label>
+                <input type="number" id="itemCounter" value="0" min="0">
+            </div>
+            <div class="counter-item">
+                <label>Votes</label>
+                <input type="number" id="voteCounter" value="0" min="0">
+            </div>
+            <div class="counter-item">
+                <label>Tally</label>
+                <input type="number" id="tallyCounter" value="0" min="0">
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-start" id="startBtn" title="Space key to start/pause">▶ START</button>
+            <button class="btn-reset" id="resetBtn" title="R key to reset">↺ RESET</button>
+            <button id="fullscreenBtn" title="F key for fullscreen display">⛶ FULLSCREEN</button>
+            <button id="lightModeBtn" title="L key to toggle theme">🌙 DARK</button>
+        </div>
+
+        <div class="presets" id="presetsContainer"></div>
+
+        <div class="settings-panel">
+            <div class="setting-group">
+                <label>Timer Mode</label>
+                <select id="timerMode">
+                    <option value="countdown">Countdown</option>
+                    <option value="stopwatch">Stopwatch</option>
+                    <option value="items">Item Counter</option>
+                    <option value="votes">Vote Counter</option>
+                    <option value="tally">Tally Counter</option>
+                </select>
+            </div>
+
+            <div class="setting-group">
+                <label>Duration (MM:SS)</label>
+                <input type="text" id="durationInput" placeholder="05:00" value="05:00">
+            </div>
+
+            <div class="setting-group">
+                <label>Warning Level (sec)</label>
+                <input type="number" id="warningLevel" value="60" min="0">
+            </div>
+
+            <div class="setting-group">
+                <label>Critical Level (sec)</label>
+                <input type="number" id="criticalLevel" value="10" min="0">
+            </div>
+
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="colorWarning" checked>
+                    <label for="colorWarning">Color Warning</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="soundWarning" checked>
+                    <label for="soundWarning">Sound Effects</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="flashWarning" checked>
+                    <label for="flashWarning">Screen Flash</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="milestoneAlerts" checked>
+                    <label for="milestoneAlerts">Milestone Alerts</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <span>Space: Start/Pause | R: Reset | F: Fullscreen | L: Theme | 1-5: Presets | ESC: Exit Fullscreen</span>
+    </footer>
+
+    <div class="keyboard-hint" id="keyboardHint">Keyboard controls enabled</div>
+
+    <script src="app.js"></script>
+</body>
+</html>

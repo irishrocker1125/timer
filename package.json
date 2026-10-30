@@ -1,0 +1,25 @@
+{
+  "name": "ultimate-stage-timer",
+  "version": "1.0.0",
+  "description": "Professional stage timer for speakers and presenters - runs on GitHub Pages",
+  "main": "app.js",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "test": "echo \"No tests configured - open index.html in browser\""
+  },
+  "keywords": [
+    "timer",
+    "presentation",
+    "stage",
+    "speaker",
+    "countdown",
+    "stopwatch"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/timer.git"
+  }
+}
