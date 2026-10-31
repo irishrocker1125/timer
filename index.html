@@ -12,93 +12,110 @@
         }
 
         :root {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --accent: #0f3460;
-            --success: #00d084;
-            --warning: #ffd700;
-            --danger: #ff4757;
-            --text: #ffffff;
-            --text-secondary: #b0b0b0;
-            --border: #2c2c4c;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'Courier New', monospace;
-            background: var(--primary);
-            color: var(--text);
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
+            --bg: #060b18;
+            --surface: #111a2f;
+            --surface-2: #182543;
+            --border: #2f4166;
+            --accent: #4ca5ff;
+            --success: #18dc8f;
+            --warning: #ffd43b;
+            --danger: #ff5470;
+            --text: #f5f8ff;
+            --text-muted: #a9b6d2;
+            --shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
         }
 
         body.light-mode {
-            --primary: #ffffff;
-            --secondary: #f5f5f5;
-            --accent: #e0e0e0;
-            --text: #000000;
-            --text-secondary: #555555;
-            --border: #cccccc;
+            --bg: #f4f8ff;
+            --surface: #ffffff;
+            --surface-2: #eef4ff;
+            --border: #c9d8f1;
+            --accent: #2f80ed;
+            --text: #101631;
+            --text-muted: #4b5d84;
+            --shadow: 0 12px 24px rgba(40, 76, 145, 0.12);
         }
 
-        header {
-            background: var(--secondary);
-            padding: 15px 20px;
-            border-bottom: 2px solid var(--border);
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at top, #132447 0%, var(--bg) 50%, #03060f 100%);
+            color: var(--text);
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            line-height: 1.3;
+            overflow: hidden;
+        }
+
+        .app-header {
+            display: flex;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8, 16, 32, 0.55);
+            backdrop-filter: blur(8px);
         }
 
-        header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 1px;
+        .app-title {
+            font-size: 22px;
+            letter-spacing: 0.6px;
+            font-weight: 700;
         }
 
-        .mode-indicator {
+        .badge-row {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
             align-items: center;
         }
 
         .mode-badge {
-            padding: 5px 12px;
-            background: var(--accent);
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 7px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: linear-gradient(145deg, var(--surface-2), var(--surface));
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .main-container {
+        .app-main {
             flex: 1;
+            overflow-y: auto;
+            padding: 24px 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .card {
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .display-card {
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-            position: relative;
-            overflow-y: auto;
+            gap: 18px;
         }
 
         .timer-display {
-            font-size: 180px;
-            font-weight: bold;
+            font-size: clamp(86px, 13vw, 172px);
             font-family: 'Courier New', monospace;
+            font-weight: 700;
             letter-spacing: -2px;
             line-height: 1;
-            text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            transition: color 0.3s ease, text-shadow 0.3s ease;
             color: var(--success);
-            margin-bottom: 20px;
             text-align: center;
-            min-height: 220px;
+            text-shadow: 0 0 40px rgba(24, 220, 143, 0.35);
+            min-height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -106,381 +123,429 @@
 
         .timer-display.warning {
             color: var(--warning);
-            text-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 45px rgba(255, 212, 59, 0.45);
         }
 
         .timer-display.critical {
             color: var(--danger);
-            text-shadow: 0 0 50px rgba(255, 71, 87, 0.8);
-            animation: pulse-critical 0.5s infinite;
+            text-shadow: 0 0 48px rgba(255, 84, 112, 0.7);
+            animation: pulse-critical 0.55s infinite;
         }
 
         @keyframes pulse-critical {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+            50% { opacity: 0.58; }
         }
 
-        .counter-display {
+        .sub-metrics {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-            width: 100%;
-            max-width: 400px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
         }
 
-        .counter-item {
-            background: var(--accent);
-            padding: 15px;
-            border-radius: 8px;
+        .metric {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface);
+            padding: 10px;
             text-align: center;
-            border: 2px solid var(--border);
         }
 
-        .counter-item label {
-            font-size: 12px;
-            color: var(--text-secondary);
+        .metric-label {
+            display: block;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
         }
 
-        .counter-item input {
-            width: 100%;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            background: transparent;
+        .metric-value {
+            font-size: 18px;
+            font-weight: 700;
             color: var(--text);
-            border: none;
-            border-bottom: 2px solid var(--border);
-            margin-top: 5px;
-            padding: 5px;
         }
 
-        .controls {
+        .progress-track {
+            height: 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .progress-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #5be5ad);
+            transition: width 0.2s ease;
+        }
+
+        .controls-stack {
             display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .adjust-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 14px;
-            font-weight: 600;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            background: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: linear-gradient(160deg, var(--surface-2), var(--surface));
             color: var(--text);
-            cursor: pointer;
+            padding: 13px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.45px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-            min-width: 120px;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            min-height: 46px;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border-color: var(--success);
+            transform: translateY(-1px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
         }
 
-        button:active {
-            transform: translateY(0);
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
         }
 
-        button.btn-start {
-            background: var(--success);
-            color: #000;
+        .btn-start {
+            background: linear-gradient(160deg, #1ce79a, #14a86f);
+            color: #081813;
+            border-color: #24e39f;
         }
 
-        button.btn-start:hover {
-            background: #00c46e;
+        .btn-pause {
+            background: linear-gradient(160deg, #ffd95c, #f0b100);
+            color: #221a05;
+            border-color: #ffda70;
         }
 
-        button.btn-pause {
-            background: var(--warning);
-            color: #000;
-        }
-
-        button.btn-pause:hover {
-            background: #ffcd00;
-        }
-
-        button.btn-reset {
-            background: var(--danger);
-        }
-
-        button.btn-reset:hover {
-            background: #ff3838;
+        .btn-reset {
+            background: linear-gradient(160deg, #ff7690, #e33958);
+            border-color: #ff8ca2;
         }
 
         .presets {
             display: flex;
-            gap: 10px;
             flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 15px;
+            gap: 8px;
         }
 
         .preset-btn {
-            padding: 8px 16px;
+            min-height: 38px;
+            padding: 9px 14px;
             font-size: 12px;
-            min-width: auto;
+            min-width: unset;
+            border-radius: 999px;
         }
 
         .preset-btn.active {
-            background: var(--success);
-            color: #000;
-            border-color: var(--success);
+            background: linear-gradient(160deg, #6ec1ff, #2f80ed);
+            border-color: #89d1ff;
         }
 
-        .settings-panel {
-            background: var(--secondary);
-            border: 2px solid var(--border);
-            border-radius: 8px;
+        .settings-card {
             padding: 20px;
-            margin-top: 30px;
-            max-width: 700px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            width: 100%;
+            gap: 16px;
+        }
+
+        .settings-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .setting-grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
         }
 
         .setting-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .setting-group label {
-            font-size: 12px;
+            font-size: 11px;
+            letter-spacing: 0.7px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-secondary);
-            font-weight: 600;
+            color: var(--text-muted);
+            font-weight: 700;
         }
 
-        .setting-group input[type="number"],
-        .setting-group select {
-            padding: 8px;
-            background: var(--primary);
-            color: var(--text);
+        input, select {
+            width: 100%;
             border: 1px solid var(--border);
-            border-radius: 4px;
+            border-radius: 10px;
+            background: var(--surface);
+            color: var(--text);
+            padding: 10px 12px;
+            font-size: 14px;
             font-family: inherit;
         }
 
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px 14px;
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .checkbox-item input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
             cursor: pointer;
-            width: 18px;
-            height: 18px;
         }
 
         .checkbox-item label {
-            cursor: pointer;
             font-size: 14px;
-            text-transform: none;
             color: var(--text);
+            cursor: pointer;
+        }
+
+        .counter-display {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .counter-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .counter-item label {
+            display: block;
+            font-size: 11px;
+            margin-bottom: 7px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .counter-item input {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
         }
 
         .footer {
-            background: var(--secondary);
-            padding: 10px 20px;
-            border-top: 2px solid var(--border);
+            padding: 9px 16px;
+            border-top: 1px solid var(--border);
             font-size: 11px;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             text-align: center;
-            overflow-x: auto;
-            white-space: nowrap;
+            background: rgba(8, 16, 32, 0.4);
         }
 
-        .keyboard-hint {
-            position: fixed;
-            bottom: 5px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 11px;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
-        }
-
-        .screen-fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--primary);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .screen-fullscreen .timer-display {
-            font-size: 220px;
-            margin-bottom: 0;
-        }
-
-        .screen-fullscreen .timer-label {
-            font-size: 42px;
-            margin-bottom: 30px;
-            color: var(--text-secondary);
-            letter-spacing: 2px;
+        .hidden {
+            display: none !important;
         }
 
         @keyframes flash {
-            0%, 100% { background: var(--primary); }
-            50% { background: rgba(255, 71, 87, 0.3); }
+            0%, 100% { background: transparent; }
+            50% { background: rgba(255, 84, 112, 0.2); }
         }
 
-        body.flashing {
+        body.flashing::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: rgba(255, 84, 112, 0.15);
             animation: flash 0.3s;
+            z-index: 20;
         }
 
-        @media (max-height: 700px) {
-            .timer-display {
-                font-size: 120px;
-                margin-bottom: 10px;
-                min-height: 140px;
-            }
-            .controls {
-                gap: 10px;
-                margin-top: 15px;
-            }
-            button {
-                padding: 10px 20px;
-                font-size: 12px;
+        @media (max-width: 1180px) {
+            .app-main {
+                grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 768px) {
-            header h1 {
+        @media (max-width: 760px) {
+            .app-header {
+                padding: 12px;
+            }
+            .app-title {
                 font-size: 18px;
             }
-            .timer-display {
-                font-size: 100px;
-                margin-bottom: 10px;
-                min-height: 120px;
+            .display-card {
+                padding: 14px;
             }
-            .settings-panel {
+            .controls-row {
                 grid-template-columns: 1fr;
-                margin-top: 20px;
             }
-            .main-container {
-                padding: 20px 10px;
+            .adjust-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .sub-metrics {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>⏱ STAGE TIMER</h1>
-        <div class="mode-indicator">
+    <header class="app-header">
+        <h1 class="app-title">⏱ Ultimate Stage Timer</h1>
+        <div class="badge-row">
             <span class="mode-badge" id="modeLabel">COUNTDOWN</span>
             <span class="mode-badge" id="statusLabel" style="background: var(--warning);">READY</span>
         </div>
     </header>
 
-    <div class="main-container">
-        <div class="timer-display" id="timerDisplay">00:00</div>
+    <main class="app-main">
+        <section class="display-card card">
+            <div class="timer-display" id="timerDisplay">00:00</div>
 
-        <div id="counterDisplay" class="counter-display" style="display: none;">
-            <div class="counter-item">
-                <label>Items</label>
-                <input type="number" id="itemCounter" value="0" min="0">
-            </div>
-            <div class="counter-item">
-                <label>Votes</label>
-                <input type="number" id="voteCounter" value="0" min="0">
-            </div>
-            <div class="counter-item">
-                <label>Tally</label>
-                <input type="number" id="tallyCounter" value="0" min="0">
-            </div>
-        </div>
-
-        <div class="controls">
-            <button class="btn-start" id="startBtn" title="Space key to start/pause">▶ START</button>
-            <button class="btn-reset" id="resetBtn" title="R key to reset">↺ RESET</button>
-            <button id="fullscreenBtn" title="F key for fullscreen display">⛶ FULLSCREEN</button>
-            <button id="lightModeBtn" title="L key to toggle theme">🌙 DARK</button>
-        </div>
-
-        <div class="presets" id="presetsContainer"></div>
-
-        <div class="settings-panel">
-            <div class="setting-group">
-                <label>Timer Mode</label>
-                <select id="timerMode">
-                    <option value="countdown">Countdown</option>
-                    <option value="stopwatch">Stopwatch</option>
-                    <option value="items">Item Counter</option>
-                    <option value="votes">Vote Counter</option>
-                    <option value="tally">Tally Counter</option>
-                </select>
+            <div class="sub-metrics">
+                <div class="metric">
+                    <span class="metric-label">Remaining</span>
+                    <span class="metric-value" id="remainingValue">00:00</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Elapsed</span>
+                    <span class="metric-value" id="elapsedValue">00:00</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Next Alert</span>
+                    <span class="metric-value" id="nextAlertValue">1:00</span>
+                </div>
             </div>
 
-            <div class="setting-group">
-                <label>Duration (MM:SS)</label>
-                <input type="text" id="durationInput" placeholder="05:00" value="05:00">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
 
-            <div class="setting-group">
-                <label>Warning Level (sec)</label>
-                <input type="number" id="warningLevel" value="60" min="0">
+            <div id="counterDisplay" class="counter-display hidden">
+                <div class="counter-item">
+                    <label for="itemCounter">Items</label>
+                    <input type="number" id="itemCounter" value="0" min="0">
+                </div>
+                <div class="counter-item">
+                    <label for="voteCounter">Votes</label>
+                    <input type="number" id="voteCounter" value="0" min="0">
+                </div>
+                <div class="counter-item">
+                    <label for="tallyCounter">Tally</label>
+                    <input type="number" id="tallyCounter" value="0" min="0">
+                </div>
+            </div>
+        </section>
+
+        <aside class="settings-card card">
+            <h2 class="settings-title">Control Deck</h2>
+
+            <div class="controls-stack">
+                <div class="controls-row">
+                    <button class="btn-start" id="startBtn" title="Space to start/pause">▶ Start</button>
+                    <button class="btn-reset" id="resetBtn" title="R to reset">↺ Reset</button>
+                    <button id="fullscreenBtn" title="F for fullscreen">⛶ Fullscreen</button>
+                </div>
+
+                <div class="controls-row">
+                    <button id="lightModeBtn" title="L to toggle theme">🌙 Dark</button>
+                    <button id="repeatLastBtn" title="Load last used setup">⟲ Repeat Last Setup</button>
+                    <button id="clearStateBtn" title="Clear saved setup">✖ Clear Saved</button>
+                </div>
+
+                <div class="adjust-row" id="adjustRow">
+                    <button class="adjust-btn" data-adjust="-60">−1:00</button>
+                    <button class="adjust-btn" data-adjust="-10">−0:10</button>
+                    <button class="adjust-btn" data-adjust="10">+0:10</button>
+                    <button class="adjust-btn" data-adjust="60">+1:00</button>
+                </div>
+
+                <div class="presets" id="presetsContainer"></div>
             </div>
 
-            <div class="setting-group">
-                <label>Critical Level (sec)</label>
-                <input type="number" id="criticalLevel" value="10" min="0">
+            <div class="setting-grid">
+                <div class="setting-group">
+                    <label for="timerMode">Timer Mode</label>
+                    <select id="timerMode">
+                        <option value="countdown">Countdown</option>
+                        <option value="stopwatch">Stopwatch</option>
+                        <option value="items">Item Counter</option>
+                        <option value="votes">Vote Counter</option>
+                        <option value="tally">Tally Counter</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label for="durationInput">Duration (MM:SS or HH:MM:SS)</label>
+                    <input type="text" id="durationInput" placeholder="05:00" value="05:00">
+                </div>
+
+                <div class="setting-group">
+                    <label for="warningLevel">Warning Level (sec)</label>
+                    <input type="number" id="warningLevel" value="60" min="0">
+                </div>
+
+                <div class="setting-group">
+                    <label for="criticalLevel">Critical Level (sec)</label>
+                    <input type="number" id="criticalLevel" value="10" min="0">
+                </div>
             </div>
 
-            <div class="checkbox-group">
+            <div class="checkbox-grid">
                 <div class="checkbox-item">
                     <input type="checkbox" id="colorWarning" checked>
-                    <label for="colorWarning">Color Warning</label>
+                    <label for="colorWarning">Color warning</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="checkbox" id="soundWarning" checked>
-                    <label for="soundWarning">Sound Effects</label>
+                    <label for="soundWarning">Sound effects</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="checkbox" id="flashWarning" checked>
-                    <label for="flashWarning">Screen Flash</label>
+                    <label for="flashWarning">Screen flash</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="checkbox" id="milestoneAlerts" checked>
-                    <label for="milestoneAlerts">Milestone Alerts</label>
+                    <label for="milestoneAlerts">Milestone alerts</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="autoReset" >
+                    <label for="autoReset">Auto reset at 00:00</label>
                 </div>
             </div>
-        </div>
-    </div>
+        </aside>
+    </main>
 
     <footer class="footer">
-        <span>Space: Start/Pause | R: Reset | F: Fullscreen | L: Theme | 1-5: Presets | ESC: Exit Fullscreen</span>
+        Space: Start/Pause | R: Reset | F: Fullscreen | L: Theme | 1-5: Presets | ESC: Exit Fullscreen
     </footer>
-
-    <div class="keyboard-hint" id="keyboardHint">Keyboard controls enabled</div>
 
     <script src="app.js"></script>
 </body>
